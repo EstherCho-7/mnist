@@ -49,10 +49,10 @@ async def create_upload_file(file: UploadFile):
 
 
 @app.get('/many/{size}')
-def many(size: int):
+def many(size: int = -1):
+    from mnist.db import get_conn
     sql="select * from image_processing where prediction_time IS NULL order by num"
-    conn=pymysql.connect(host='127.0.0.1', port=53306, user='mnist', password='1234', database='mnistdb', cursorclass=pymysql.cursors.DictCursor)
-
+    conn=get_conn()
     with conn:
         with conn.cursor() as cursor:
             cursor.execute(sql)
@@ -62,24 +62,14 @@ def many(size: int):
 
 @app.get('/one')
 def one():
-    sql="select * from image_processing where prediction_time IS NULL order by num"
-    conn=pymysql.connect(host='127.0.0.1', port=53306, user='mnist', password='1234', database='mnistdb', cursorclass=pymysql.cursors.DictCursor)
-
-    with conn:
-        with conn.cursor() as cursor:
-            cursor.execute(sql)
-            result=cursor.fetchone()
-
-    return result
+    from mnist.db import select
+    sql="select * from image_processing where prediction_time IS NULL order by num limit 1"
+    result=select(query=sql, size=1)
+    return result[0]
 
 @app.get('/all')
 def all():
-    sql="select * from image_processing where prediction_time IS NULL order by num"
-    conn=pymysql.connect(host='127.0.0.1', port=53306, user='mnist', password='1234', database='mnistdb', cursorclass=pymysql.cursors.DictCursor)
-
-    with conn:
-        with conn.cursor() as cursor:
-            cursor.execute(sql)
-            result=cursor.fetchall()
-
+    from mnist.db import select
+    sql="select * from image_processing"
+    result=select(query=sql, size=-1)
     return result
