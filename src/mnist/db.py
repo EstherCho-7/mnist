@@ -11,3 +11,11 @@ def select(query: str, size=-1):
             cursor.execute(query)
             result=cursor.fetchmany(size)
     return result
+
+def dml(sql, *values):
+    conn=get_conn()
+    with conn:
+        with conn.cursor() as cursor:
+            cursor.execute(sql, values)
+            conn.commit()
+            return cursor.rowcount

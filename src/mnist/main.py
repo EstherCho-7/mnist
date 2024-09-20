@@ -9,8 +9,15 @@ app = FastAPI()
 
 
 @app.post("/files/")
-async def create_file(file: Annotated[bytes, File()]):
-    return {"file_size": len(file)}
+async def file_list():
+    from mnist.db import get_conn
+    conn=get_conn()
+    with conn:
+        with conn.cursor() as cursor:
+            sql="select * from image_processing where prediction_time IS NULL order by num"
+            cursor.execute(sql)
+            result=cursor.fetchall()
+    return result
 
 
 @app.post("/uploadfile/")
@@ -33,18 +40,15 @@ async def create_upload_file(file: UploadFile):
         f.write(img)
 
     sql="insert into image_processing(file_name, file_path, request_time, request_user) values(%s, %s, %s, %s)"
-    conn=pymysql.connect(host='127.0.0.1', port=53306, user='mnist', password='1234', database='mnistdb', cursorclass=pymysql.cursors.DictCursor)
-
-    with conn:
-        with conn.cursor() as cursor:
-            cursor.execute(sql, ('file_name', 'file_full_path', jigeum.seoul.now(), 'n15'))
-
-        conn.commit()
-
+    
+    import jigeum.seoul
+    from mnist.db import dml
+    insert_row=dml(sql, file_name, file_full_path, jigeum.seoul.now(), 'n15')
     return {
             "filename": file.filename,
             "content_type": file_ext,
             "file_full_path": file_full_path,
+            "insert_row_count": insert_row
            }
 
 
