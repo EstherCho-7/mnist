@@ -20,7 +20,7 @@ def run():
     # 3. LINE으로 처리 결과 전송
     import requests
     api_url = "https://notify-api.line.me/api/notify"
-    token = os.getenv('LINE_API_KEY','false')
+    token = os.getenv('ACCESS_TOKEN','false')
 
     headers = {'Authorization':'Bearer '+token}
 
