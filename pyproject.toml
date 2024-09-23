@@ -12,6 +12,7 @@ dependencies = [
     "PyMySql>=1.1.1",
     "pytz>=2024.2",
     "jigeum>=1.0.2",
+    "requests>=2.32.3",
 ]
 
 requires-python = "==3.11.*"
