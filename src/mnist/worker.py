@@ -29,6 +29,8 @@ def run():
     }
 
     requests.post(api_url, headers= headers , data = message)
-
-    print(f"작업 요청 시간:{jigeum.seoul.now()}")
-    return {"hello":" world"}
+    
+    return {
+            "random": rnum,
+            "prediction_time": jigeum.seoul.now()
+            }
