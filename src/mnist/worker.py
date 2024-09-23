@@ -25,7 +25,7 @@ def run():
     headers = {'Authorization':'Bearer '+token}
 
     message = {
-       "message" : f"{jigeum.seoul.now()}:task done successful"
+       "message" : f"{jigeum.seoul.now()}: successful"
     }
 
     requests.post(api_url, headers= headers , data = message)
