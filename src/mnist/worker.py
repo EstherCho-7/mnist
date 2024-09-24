@@ -42,7 +42,7 @@ def prediction(file_path, num):
     from mnist.db import dml
     sql="update image_processing set prediction_result=%s, prediction_model='n15', prediction_time=%s where num=%s"
     job=get_job_img_task()
-    filt_path=job['file_path']
+    file_path=job['file_path']
     presult=predict_digit(file_path)
     dml(sql, presult, jigeum.seoul.now(), num)
     return presult
