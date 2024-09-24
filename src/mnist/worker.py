@@ -1,6 +1,9 @@
 import jigeum.seoul
 import os
 import random
+import numpy as np
+from PIL import Image
+from keras.models import load_model
 
 def get_job_img_task():
     from mnist.db import select
@@ -12,10 +15,35 @@ def get_job_img_task():
     else:
         return None
 
+# 모델 로드
+model = load_model('/home/esthercho/code/mnist/note/mnist240924.keras')  # 학습된 모델 파일 경로
+
+# 사용자 이미지 불러오기 및 전처리
+def preprocess_image(image_path):
+    img = Image.open(image_path).convert('L')  # 흑백 이미지로 변환
+    img = img.resize((28, 28))  # 크기 조정
+
+    # 흑백 반전
+    img = 255 - np.array(img)  # 흑백 반전
+    
+    img = np.array(img)
+    img = img.reshape(1, 28, 28, 1)  # 모델 입력 형태에 맞게 변형
+    img = img / 255.0  # 정규화
+    return img
+
+# 예측
+def predict_digit(image_path):
+    img = preprocess_image(image_path)
+    prediction = model.predict(img)
+    digit = np.argmax(prediction)
+    return digit
+
 def prediction(file_path, num):
     from mnist.db import dml
     sql="update image_processing set prediction_result=%s, prediction_model='n15', prediction_time=%s where num=%s"
-    presult=random.randint(0, 9)
+    job=get_job_img_task()
+    filt_path=job['file_path']
+    presult=predict_digit(file_path)
     dml(sql, presult, jigeum.seoul.now(), num)
     return presult
 
