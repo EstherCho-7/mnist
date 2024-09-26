@@ -25,4 +25,6 @@ $ tail -f /var/log/worker.log
 - or, wait for notification of LINE (notify every 3 minutes)
 
 ## Result
+![image](https://github.com/user-attachments/assets/bedf1554-ab52-497a-b848-ee7ff98fbeda)
+![image](https://github.com/user-attachments/assets/5d34dfd4-37ba-4d8d-a29a-ae40b7592b9e)
 
