@@ -16,7 +16,7 @@ def get_job_img_task():
         return None
 
 # 모델 로드
-model = load_model('/code/mnist240924.keras')  # 학습된 모델 파일 경로
+model = load_model('./mnist240924.keras')  # 학습된 모델 파일 경로
 
 # 사용자 이미지 불러오기 및 전처리
 def preprocess_image(image_path):
