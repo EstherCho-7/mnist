@@ -16,7 +16,14 @@ def get_job_img_task():
         return None
 
 # 모델 로드
-model = load_model('mnist240924.keras')  # 학습된 모델 파일 경로
+def get_model_path():
+    # import os ...
+    # 이 함수 파일의 절대 경로를 받아온다
+    f= __file__
+    # 절대 경로를 이용해 model.pkl의 경로를 조합
+    dir_name=os.path.dirname(f)
+    file_path=os.path.join(dir_name, "mnist240924.keras")
+    return file_path
 
 # 사용자 이미지 불러오기 및 전처리
 def preprocess_image(image_path):
@@ -59,6 +66,8 @@ def run():
     
     presult= prediction(file_path, num)
 
+    model_path=get_model_path()
+    model = load_model(model_path)
     print(jigeum.seoul.now())
 
     # line
